@@ -8,7 +8,7 @@ build = "build.rs"
 [dependencies]
 anyhow = "1.0.75"
 itertools = "0.12.0"
-scan_fmt = "0.2.6"
+scan_fmt = { version = "0.2.6", features = ["regex"] }
 
 [build-dependencies]
 tinytemplate = "1.2.1"
