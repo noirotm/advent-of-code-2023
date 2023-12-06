@@ -74,7 +74,6 @@ impl Almanac {
 
 #[derive(Debug)]
 struct Map {
-    name: String,
     entries: Vec<MapEntry>,
 }
 
@@ -92,15 +91,9 @@ impl FromStr for Map {
     type Err = anyhow::Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let mut lines = s.lines();
-        let name = scan_fmt!(
-            lines.next().ok_or(anyhow!("missing name"))?,
-            "{} map:",
-            String
-        )?;
-        let entries = lines.flat_map(|l| l.parse()).collect();
-
-        Ok(Self { name, entries })
+        Ok(Self {
+            entries: s.lines().skip(1).flat_map(|l| l.parse()).collect(),
+        })
     }
 }
 
