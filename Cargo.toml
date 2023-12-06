@@ -1,0 +1,16 @@
+[package]
+name = "aoc-rs-2023"
+version = "0.1.0"
+authors = ["Marc Noirot <marc.noirot@gmail.com>"]
+edition = "2021"
+build = "build.rs"
+
+[dependencies]
+anyhow = "1.0.75"
+itertools = "0.12.0"
+scan_fmt = "0.2.6"
+
+[build-dependencies]
+tinytemplate = "1.2.1"
+serde = { version = "1.0.193", features = ["derive"] }
+serde_json = "1.0.108"
