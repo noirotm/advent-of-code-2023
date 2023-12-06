@@ -21,3 +21,18 @@ pub fn exec_day(day: u32) {
         d => println!("Day {d} hasn't been solved yet :("),
     }
 }
+
+pub fn exec_all_days() {
+    println!("Day 1:");
+    day01::Problem {}.solve(1);
+    println!("Day 2:");
+    day02::Problem {}.solve(2);
+    println!("Day 3:");
+    day03::Problem {}.solve(3);
+    println!("Day 4:");
+    day04::Problem {}.solve(4);
+    println!("Day 5:");
+    day05::Problem {}.solve(5);
+    println!("Day 6:");
+    day06::Problem {}.solve(6);
+}

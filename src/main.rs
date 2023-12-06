@@ -1,4 +1,4 @@
-use crate::solutions::exec_day;
+use crate::solutions::{exec_all_days, exec_day};
 use std::env;
 
 mod grid;
@@ -6,10 +6,9 @@ mod solutions;
 mod solver;
 
 fn main() {
-    let day = env::args()
-        .nth(1)
-        .unwrap_or_else(|| String::from("1"))
-        .parse()
-        .unwrap_or(1);
-    exec_day(day);
+    if let Some(day) = env::args().nth(1) {
+        exec_day(day.parse().unwrap_or(1));
+    } else {
+        exec_all_days();
+    }
 }

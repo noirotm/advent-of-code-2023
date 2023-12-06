@@ -11,3 +11,8 @@ pub fn exec_day(day: u32) \{
         d => println!("Day \{d} hasn't been solved yet :("),
     }
 }
+
+pub fn exec_all_days() \{{{ for day in days }}
+    println!("Day {day}:");
+    day{day | leading_zero}::Problem \{}.solve({day});{{ endfor }}
+}
