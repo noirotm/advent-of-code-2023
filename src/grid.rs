@@ -39,7 +39,7 @@ impl<T> Grid<T> {
     {
         let cells = BufReader::new(r)
             .lines()
-            .filter_map(|l| l.ok())
+            .map_while(Result::ok)
             .map(|l| l.bytes().map(f).collect::<Result<Vec<_>, _>>())
             .collect::<Result<Vec<_>, _>>()?;
         let h = cells.len();
@@ -66,7 +66,7 @@ impl<T> Grid<T> {
     {
         let cells = BufReader::new(r)
             .lines()
-            .filter_map(|l| l.ok())
+            .map_while(Result::ok)
             .map(|l| {
                 l.split_whitespace()
                     .map(T::from_str)
@@ -110,7 +110,7 @@ impl<T> Grid<T> {
         let x_offset = -min_x;
         let y_offset = -min_y;
 
-        let mut grid = Self::new(w as usize, h as usize);
+        let mut grid = Self::new(w, h);
 
         for (pt, cell) in points {
             let x = (pt.x + x_offset) as usize;
