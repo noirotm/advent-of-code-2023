@@ -44,10 +44,10 @@ pub trait Solver {
 }
 
 pub trait ReadExt<T> {
-    fn split_by(self, separator: u8) -> Vec<T>;
-    fn split_commas(self) -> Vec<T>;
-    fn split_lines(self) -> Vec<T>;
-    fn split_groups(self) -> Vec<T>;
+    fn split_by<B: FromIterator<T>>(self, separator: u8) -> B;
+    fn split_commas<B: FromIterator<T>>(self) -> B;
+    fn split_lines<B: FromIterator<T>>(self) -> B;
+    fn split_groups<B: FromIterator<T>>(self) -> B;
 }
 
 impl<R, T> ReadExt<T> for R
@@ -55,7 +55,7 @@ where
     R: Read,
     T: FromStr,
 {
-    fn split_by(self, separator: u8) -> Vec<T> {
+    fn split_by<B: FromIterator<T>>(self, separator: u8) -> B {
         BufReader::new(self)
             .split(separator)
             .flatten()
@@ -64,11 +64,11 @@ where
             .collect()
     }
 
-    fn split_commas(self) -> Vec<T> {
+    fn split_commas<B: FromIterator<T>>(self) -> B {
         self.split_by(b',')
     }
 
-    fn split_lines(self) -> Vec<T> {
+    fn split_lines<B: FromIterator<T>>(self) -> B {
         BufReader::new(self)
             .lines()
             .flatten()
@@ -76,13 +76,13 @@ where
             .collect()
     }
 
-    fn split_groups(self) -> Vec<T> {
+    fn split_groups<B: FromIterator<T>>(self) -> B {
         BufReader::new(self)
             .lines()
             .flatten()
             .collect::<Vec<_>>()
             .split(|l| l.is_empty())
             .flat_map(|e| e.join("\n").parse())
-            .collect::<Vec<T>>()
+            .collect()
     }
 }
