@@ -27,9 +27,13 @@ pub trait Solver {
 
     fn solve(&self, day: u32) {
         let input_file = input_file(day);
+
+        let start = Instant::now();
         let input = self
             .load_input(input_file)
             .expect("unable to open input file");
+        let time = start.elapsed();
+        println!("Parsing: ({})", format_duration(time));
 
         let start = Instant::now();
         let s1 = self.solve_first(&input);
