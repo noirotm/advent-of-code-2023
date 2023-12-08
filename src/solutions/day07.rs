@@ -343,10 +343,11 @@ mod part2 {
             let mut has_three = false;
             let mut pairs = 0usize;
 
-            for (&card, &occ) in occurences
+            for occ in occurences
                 .iter()
                 .filter(|&(&c, _)| !c.eq(&Card::CJ))
-                .sorted_by_key(|(_, n)| *n)
+                .map(|(_, n)| *n)
+                .sorted()
                 .rev()
             {
                 // jokers can replace any card, so add the occurrences if not joker
