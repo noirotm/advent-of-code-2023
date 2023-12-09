@@ -1,4 +1,5 @@
-use crate::solver::{ReadExt, Solver};
+use crate::parsing::ReadExt;
+use crate::solver::Solver;
 use std::io::Read;
 
 pub struct Problem;

@@ -1,4 +1,5 @@
-use crate::solver::{ReadExt, Solver};
+use crate::parsing::ReadExt;
+use crate::solver::Solver;
 use anyhow::anyhow;
 use rayon::prelude::*;
 use scan_fmt::scan_fmt;

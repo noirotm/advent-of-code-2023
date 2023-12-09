@@ -1,4 +1,5 @@
-use crate::solver::{ReadExt, Solver};
+use crate::parsing::ReadExt;
+use crate::solver::Solver;
 use scan_fmt::scan_fmt;
 use std::collections::{HashMap, HashSet, VecDeque};
 use std::io::Read;

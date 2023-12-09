@@ -1,4 +1,5 @@
-use crate::solver::{ReadExt, Solver};
+use crate::parsing::ReadExt;
+use crate::solver::Solver;
 use std::collections::BTreeSet;
 use std::io::{read_to_string, Read};
 
