@@ -2,6 +2,7 @@ use crate::solutions::{exec_all_days, exec_day};
 use std::env;
 
 mod grid;
+mod parsing;
 mod solutions;
 mod solver;
 
