@@ -84,8 +84,6 @@ impl Solver for Problem {
                 }
             }
 
-            println!("First endings: {:?}", first_endings);
-
             if first_endings.iter().all(|h| !h.is_empty()) {
                 if let Some(lcm) = first_endings
                     .iter()
