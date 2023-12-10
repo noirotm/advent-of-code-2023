@@ -84,11 +84,11 @@ impl FromStr for Card {
             id,
             winning_numbers: winning_nums
                 .split_ascii_whitespace()
-                .flat_map(|s| s.parse())
+                .flat_map(u8::from_str)
                 .collect(),
             numbers: nums
                 .split_ascii_whitespace()
-                .flat_map(|s| s.parse())
+                .flat_map(u8::from_str)
                 .collect(),
         })
     }
