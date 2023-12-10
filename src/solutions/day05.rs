@@ -4,7 +4,7 @@ use anyhow::anyhow;
 use rayon::prelude::*;
 use scan_fmt::scan_fmt;
 use std::io::Read;
-use std::ops::Range;
+use std::ops::{Range, RangeInclusive};
 use std::str::FromStr;
 
 pub struct Problem;
@@ -31,10 +31,9 @@ impl Solver for Problem {
     fn solve_second(&self, input: &Self::Input) -> Self::Output2 {
         input
             .seed_pairs()
-            .par_iter()
+            .into_par_iter()
             .flat_map(|range| {
                 range
-                    .clone()
                     .into_par_iter()
                     .map(|seed| input.maps.iter().fold(seed, |id, map| map.get(id)))
             })
@@ -60,7 +59,7 @@ impl Almanac {
             String
         )?
         .split_ascii_whitespace()
-        .flat_map(|s| s.parse())
+        .flat_map(usize::from_str)
         .collect();
 
         let maps = group_iter.flat_map(|s| s.parse()).collect();
@@ -100,18 +99,20 @@ impl FromStr for Map {
 
 #[derive(Debug)]
 struct MapEntry {
-    n: usize,
-    source: usize,
-    dest: usize,
+    range: RangeInclusive<usize>,
+    delta: usize,
 }
 
 impl MapEntry {
-    fn get(&self, id: usize) -> Option<usize> {
-        if !(self.source..=self.source + self.n).contains(&id) {
-            return None;
+    fn new(n: usize, source: usize, dest: usize) -> Self {
+        Self {
+            range: source..=source + n,
+            delta: dest - source,
         }
+    }
 
-        Some(self.dest + id - self.source)
+    fn get(&self, id: usize) -> Option<usize> {
+        self.range.contains(&id).then_some(self.delta + id)
     }
 }
 
@@ -120,7 +121,7 @@ impl FromStr for MapEntry {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let (dest, source, n) = scan_fmt!(s, "{} {} {}", usize, usize, usize)?;
-        Ok(Self { n, source, dest })
+        Ok(Self::new(n, source, dest))
     }
 }
 
@@ -130,12 +131,7 @@ mod tests {
 
     #[test]
     fn map_entry() {
-        let map_entry = MapEntry {
-            n: 5,
-            source: 1,
-            dest: 21,
-        };
-
+        let map_entry = MapEntry::new(5, 1, 21);
         assert_eq!(map_entry.get(1), Some(21));
         assert_eq!(map_entry.get(6), Some(26));
         assert_eq!(map_entry.get(7), None);
@@ -143,12 +139,7 @@ mod tests {
 
     #[test]
     fn map_entry2() {
-        let map_entry = MapEntry {
-            n: 2,
-            source: 98,
-            dest: 50,
-        };
-
+        let map_entry = MapEntry::new(2, 50, 98);
         assert_eq!(map_entry.get(79), None);
         assert_eq!(map_entry.get(14), None);
     }
