@@ -211,6 +211,14 @@ impl<T> Grid<T> {
         }
     }
 
+    pub fn iter_with_coords(&self) -> IterWithCoords<'_, T> {
+        IterWithCoords {
+            grid: self,
+            x: 0,
+            y: 0,
+        }
+    }
+
     pub fn as_slice(&self) -> &[T] {
         &self.cells
     }
@@ -343,5 +351,38 @@ impl<'a, T> Iterator for RowIter<'a, T> {
         let val = self.grid.get((self.pos, self.row))?;
         self.pos += 1;
         Some(val)
+    }
+}
+
+pub struct IterWithCoords<'a, T> {
+    grid: &'a Grid<T>,
+    x: usize,
+    y: usize,
+}
+
+impl<'a, T> Iterator for IterWithCoords<'a, T> {
+    type Item = ((usize, usize), &'a T);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let item = ((self.x, self.y), self.grid.get((self.x, self.y))?);
+
+        if self.x == self.grid.w - 1 {
+            self.x = 0;
+            self.y += 1;
+        } else {
+            self.x += 1;
+        }
+
+        if self.y == self.grid.h {
+            return None;
+        }
+
+        Some(item)
+    }
+}
+
+impl<'a, T> ExactSizeIterator for IterWithCoords<'a, T> {
+    fn len(&self) -> usize {
+        self.grid.w * self.grid.h
     }
 }
